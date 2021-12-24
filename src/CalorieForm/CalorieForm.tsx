@@ -18,10 +18,11 @@ import {
 
 import Toggle from "../Toggle/Toggle";
 import LineBlock from "../LineBlock/LineBlock";
+import { height } from "@mui/system";
 
 const CalorieForm = () => {
 	const [gender, setGender] = useState("female");
-	const [units] = useState("metric");
+	const [units, setUnits] = useState("metric");
 	const [activityLevel, setActivityLevel] = useState(ActivityLevel.medium);
 	const [goal, setGoal] = useState(GoalMultiplier.recomp);
 	const [calorieNeed, setCalorieNeed] = useState(0);
