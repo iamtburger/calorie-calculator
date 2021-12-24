@@ -1,9 +1,6 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import CalorieForm from "./CalorieForm/CalorieForm";
-import { createTheme, Paper, responsiveFontSizes } from "@mui/material";
-import { orange } from "@mui/material/colors";
+import { createTheme, responsiveFontSizes } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 
 declare module "@mui/material/styles" {
