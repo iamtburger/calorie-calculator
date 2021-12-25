@@ -13,10 +13,8 @@ interface IOption {
 }
 
 const StyledToggleButton = styled(ToggleButton)(() => ({
-	// backgroundColor: "white",
 	backgroundColor: "rgb(248,248,255)",
 	"&.Mui-selected": {
-		// backgroundColor: "rgb(255, 64, 64)",
 		backgroundColor: "rgb(66, 66, 66)",
 		color: "white",
 		border: "1px solid white",

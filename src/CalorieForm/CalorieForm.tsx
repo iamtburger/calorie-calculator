@@ -3,9 +3,9 @@ import {
 	Container,
 	Grid,
 	Grow,
-	InputAdornment,
 	Paper,
-	TextField,
+	styled,
+	Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import React, { useState } from "react";
@@ -18,6 +18,18 @@ import {
 
 import Toggle from "../Toggle/Toggle";
 import LineBlock from "../LineBlock/LineBlock";
+import NumInput from "../NumInput/NumInput";
+
+const StyledSubmitButton = styled(Button)(() => ({
+	"&:hover": {
+		backgroundColor: "rgb(69, 69, 69)",
+	},
+	backgroundColor: "rgb(66, 66, 66)",
+	width: "50%",
+	height: "50px",
+	marginTop: "10px",
+	marginBottom: "10px",
+}));
 
 const CalorieForm = () => {
 	const [gender, setGender] = useState("female");
@@ -41,14 +53,16 @@ const CalorieForm = () => {
 		e: React.MouseEvent<HTMLElement>,
 		newActvitiyLevel: string
 	) => {
-		setActivityLevel(Number(newActvitiyLevel));
+		newActvitiyLevel && setActivityLevel(Number(newActvitiyLevel));
 	};
+
 	const handleGoalChange = (
 		e: React.MouseEvent<HTMLElement>,
 		newGoal: string
 	) => {
-		setGoal(Number(newGoal));
+		newGoal && setGoal(Number(newGoal));
 	};
+
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
@@ -87,12 +101,30 @@ const CalorieForm = () => {
 	const formHasErrors = heightError || weightError || ageError;
 
 	return (
-		// <>
 		<Container maxWidth="sm">
 			<Paper
 				elevation={5}
-				sx={{ backgroundColor: "rgb(145, 145, 145)", padding: "10px", mt: 2 }}
+				sx={{
+					backgroundColor: "rgb(145, 145, 145)",
+					padding: "10px",
+					mt: 2,
+				}}
 			>
+				<Box
+					className="title-container"
+					display="flex"
+					alignItems="flex-end"
+					justifyContent="center"
+				>
+					<Typography
+						variant="h4"
+						textAlign="center"
+						sx={{ mt: 1, color: "white", ml: 1 }}
+						className="title"
+					>
+						CALORIE CALCULATOR
+					</Typography>
+				</Box>
 				<Box
 					component="form"
 					onSubmit={handleSubmit}
@@ -117,73 +149,27 @@ const CalorieForm = () => {
 					<LineBlock>
 						<Grid container justifyContent="space-between" width="90%">
 							<Grid item xs={12} md={3} mb="5px">
-								<TextField
+								<NumInput
 									error={heightError}
-									id="height"
-									label="Height"
-									type="height"
-									name="height"
-									variant="filled"
-									InputLabelProps={{
-										shrink: true,
-									}}
-									sx={{
-										width: "100%",
-										backgroundColor: "rgb(248,248,255)",
-										borderRadius: "5%",
-										justifySelf: "center",
-									}}
-									InputProps={{
-										endAdornment: (
-											<InputAdornment position="end">
-												{units === "metric" ? "cm" : "in"}
-											</InputAdornment>
-										),
-									}}
-									onChange={handleHeightChange}
+									label={"height"}
+									handleChange={handleHeightChange}
+									type={units === "metric" ? "cm" : "ft"}
 								/>
 							</Grid>
 							<Grid item xs={12} md={3} mb="5px">
-								<TextField
-									id="weight"
-									label="Weight"
-									type="weight"
-									name="weight"
-									variant="filled"
-									sx={{
-										width: "100%",
-										backgroundColor: "rgb(248,248,255)",
-										borderRadius: "5%",
-									}}
-									InputLabelProps={{
-										shrink: true,
-									}}
-									InputProps={{
-										endAdornment: (
-											<InputAdornment position="end">
-												{units === "metric" ? "kg" : "lbs"}
-											</InputAdornment>
-										),
-									}}
-									onChange={handleWeightChange}
+								<NumInput
+									error={weightError}
+									label="weight"
+									handleChange={handleWeightChange}
+									type={units === "metric" ? "kg" : "lbs"}
 								/>
 							</Grid>
 							<Grid item xs={12} md={3}>
-								<TextField
-									id="age"
-									label="Age"
-									type="age"
-									name="age"
-									variant="filled"
-									sx={{
-										width: "100%",
-										backgroundColor: "rgb(248,248,255)",
-										borderRadius: "5%",
-									}}
-									InputLabelProps={{
-										shrink: true,
-									}}
-									onChange={handleAgeChange}
+								<NumInput
+									error={ageError}
+									label="age"
+									handleChange={handleAgeChange}
+									type=""
 								/>
 							</Grid>
 						</Grid>
@@ -212,18 +198,9 @@ const CalorieForm = () => {
 							]}
 						/>
 					</LineBlock>
-					<Button
-						variant="contained"
-						type="submit"
-						sx={{
-							backgroundColor: "rgb(66, 66, 66)",
-							width: "50%",
-							height: "50px",
-							m: 1,
-						}}
-					>
+					<StyledSubmitButton variant="contained" type="submit">
 						{calorieNeed === 0 ? "Calculate" : "Recalculate"}
-					</Button>
+					</StyledSubmitButton>
 					<Grow in={formHasErrors}>
 						<Paper
 							elevation={6}
@@ -253,6 +230,7 @@ const CalorieForm = () => {
 								justifyContent: "center",
 								width: "80%",
 								mt: -3,
+								padding: "5px",
 								border: "2px solid white",
 							}}
 						>
@@ -265,7 +243,6 @@ const CalorieForm = () => {
 				</Box>
 			</Paper>
 		</Container>
-		// </>
 	);
 };
 
