@@ -2,7 +2,7 @@ import { InputAdornment, TextField } from "@mui/material";
 
 interface INumInputProps {
 	error: boolean;
-	handleChange: (e: any) => void;
+	handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	label: string;
 	type: string;
 }
@@ -14,6 +14,7 @@ const NumInput = ({ error, handleChange, label, type }: INumInputProps) => {
 
 	return (
 		<TextField
+			required
 			error={error}
 			id={label}
 			label={capitalizeFirstLetter(label)}

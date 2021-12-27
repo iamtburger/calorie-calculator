@@ -19,12 +19,15 @@ import {
 import Toggle from "../Toggle/Toggle";
 import LineBlock from "../LineBlock/LineBlock";
 import NumInput from "../NumInput/NumInput";
+import Footer from "../Footer/Footer";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Result from "../Result/Result";
 
-const StyledSubmitButton = styled(Button)(() => ({
+const StyledSubmitButton = styled(Button)(({ theme }) => ({
 	"&:hover": {
-		backgroundColor: "rgb(69, 69, 69)",
+		backgroundColor: theme.palette.primary.dark,
 	},
-	backgroundColor: "rgb(66, 66, 66)",
+	backgroundColor: theme.palette.primary.main,
 	width: "50%",
 	height: "50px",
 	marginTop: "10px",
@@ -38,9 +41,11 @@ const CalorieForm = () => {
 	const [goal, setGoal] = useState(GoalMultiplier.recomp);
 	const [calorieNeed, setCalorieNeed] = useState(0);
 
-	const [heightError, setHeightError] = useState(false);
-	const [weightError, setWeightError] = useState(false);
-	const [ageError, setAgeError] = useState(false);
+	const [error, setError] = useState({
+		heightError: false,
+		weightError: false,
+		ageError: false,
+	});
 
 	const handleGenderChange = (
 		e: React.MouseEvent<HTMLElement>,
@@ -63,7 +68,7 @@ const CalorieForm = () => {
 		newGoal && setGoal(Number(newGoal));
 	};
 
-	const handleSubmit = (e: any) => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const neat = calculateNeat(
@@ -76,29 +81,30 @@ const CalorieForm = () => {
 		setCalorieNeed(Math.round(calorieNeed));
 	};
 
-	const handleHeightChange = (e: any) => {
+	const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (isNaN(Number(e.target.value))) {
-			setHeightError(true);
+			setError((state) => ({ ...state, heightError: true }));
 		} else {
-			setHeightError(false);
-		}
-	};
-	const handleWeightChange = (e: any) => {
-		if (isNaN(Number(e.target.value))) {
-			setWeightError(true);
-		} else {
-			setWeightError(false);
-		}
-	};
-	const handleAgeChange = (e: any) => {
-		if (isNaN(Number(e.target.value))) {
-			setAgeError(true);
-		} else {
-			setAgeError(false);
+			setError((state) => ({ ...state, heightError: false }));
 		}
 	};
 
-	const formHasErrors = heightError || weightError || ageError;
+	const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (isNaN(Number(e.target.value))) {
+			setError((state) => ({ ...state, weightError: true }));
+		} else {
+			setError((state) => ({ ...state, weightError: false }));
+		}
+	};
+	const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (isNaN(Number(e.target.value))) {
+			setError((state) => ({ ...state, ageError: true }));
+		} else {
+			setError((state) => ({ ...state, ageError: false }));
+		}
+	};
+
+	const formHasErrors = Object.values(error).some((value) => value);
 
 	return (
 		<Container maxWidth="sm">
@@ -108,6 +114,7 @@ const CalorieForm = () => {
 					backgroundColor: "rgb(145, 145, 145)",
 					padding: "10px",
 					mt: 2,
+					mb: 1,
 				}}
 			>
 				<Box
@@ -129,7 +136,7 @@ const CalorieForm = () => {
 					component="form"
 					onSubmit={handleSubmit}
 					sx={{
-						mt: 3,
+						mt: 2,
 						alignItems: "center",
 						display: "flex",
 						flexDirection: "column",
@@ -150,7 +157,7 @@ const CalorieForm = () => {
 						<Grid container justifyContent="space-between" width="90%">
 							<Grid item xs={12} md={3} mb="5px">
 								<NumInput
-									error={heightError}
+									error={error.heightError}
 									label={"height"}
 									handleChange={handleHeightChange}
 									type={units === "metric" ? "cm" : "ft"}
@@ -158,7 +165,7 @@ const CalorieForm = () => {
 							</Grid>
 							<Grid item xs={12} md={3} mb="5px">
 								<NumInput
-									error={weightError}
+									error={error.weightError}
 									label="weight"
 									handleChange={handleWeightChange}
 									type={units === "metric" ? "kg" : "lbs"}
@@ -166,7 +173,7 @@ const CalorieForm = () => {
 							</Grid>
 							<Grid item xs={12} md={3}>
 								<NumInput
-									error={ageError}
+									error={error.ageError}
 									label="age"
 									handleChange={handleAgeChange}
 									type=""
@@ -198,49 +205,27 @@ const CalorieForm = () => {
 							]}
 						/>
 					</LineBlock>
-					<StyledSubmitButton variant="contained" type="submit">
+					<StyledSubmitButton
+						variant="contained"
+						type="submit"
+						disabled={formHasErrors}
+					>
 						{calorieNeed === 0 ? "Calculate" : "Recalculate"}
 					</StyledSubmitButton>
 					<Grow in={formHasErrors}>
-						<Paper
-							elevation={6}
-							sx={{
-								height: "30px",
-								backgroundColor: "rgb(255, 64, 64)",
-								color: "white",
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								width: "80%",
-								mt: 0,
-							}}
-						>
-							<p>Please enter only numbers!</p>
-						</Paper>
+						<Box display="flex" width="80%" justifyContent="center">
+							<ErrorMessage>
+								<Typography>Please enter only numbers!</Typography>
+							</ErrorMessage>
+						</Box>
 					</Grow>
-					<Grow in={calorieNeed > 0}>
-						<Paper
-							elevation={3}
-							sx={{
-								height: "80px",
-								backgroundColor: "rgb(66, 66, 66)",
-								color: "white",
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								width: "80%",
-								mt: -3,
-								padding: "5px",
-								border: "2px solid white",
-							}}
-						>
-							<p>
-								Under current conditions <strong>{calorieNeed}</strong> are
-								necessary daily!
-							</p>
-						</Paper>
+					<Grow in={calorieNeed > 0 && !formHasErrors}>
+						<Box display="flex" width="80%" justifyContent="center">
+							<Result calorieNeed={calorieNeed} />
+						</Box>
 					</Grow>
 				</Box>
+				<Footer />
 			</Paper>
 		</Container>
 	);

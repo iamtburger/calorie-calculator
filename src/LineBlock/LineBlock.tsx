@@ -1,8 +1,8 @@
 import { Paper, styled } from "@mui/material";
 import React from "react";
 
-const PaperLineBlock = styled(Paper)(() => ({
-	backgroundColor: "rgb(255, 64, 64)",
+const PaperLineBlock = styled(Paper)(({ theme }) => ({
+	backgroundColor: theme.palette.secondary.main,
 	minHeight: "90px",
 	width: "80%",
 	display: "flex",
@@ -12,11 +12,11 @@ const PaperLineBlock = styled(Paper)(() => ({
 	margin: "10px",
 }));
 
-interface IChildren {
+interface ILineBlockProps {
 	children: React.ReactNode;
 }
 
-const LineBlock = ({ children }: IChildren) => {
+const LineBlock = ({ children }: ILineBlockProps) => {
 	return <PaperLineBlock elevation={6}>{children}</PaperLineBlock>;
 };
 

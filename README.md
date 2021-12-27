@@ -5,7 +5,6 @@ Meanwhile I had the chance get bit more familiar with Material UI.
 
 ## TODO
 
-1. Refactor
-2. Work on coloring (adding a theme)
-3. Improve responsiveness
-4. Play around
+1. Error and result display correction
+2. Work on coloring: some rationalization and organizing theme colors
+3. Play around

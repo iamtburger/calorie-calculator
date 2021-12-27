@@ -6,26 +6,34 @@ import {
 	Box,
 	Typography,
 } from "@mui/material";
+import React from "react";
 
 interface IOption {
-	value: string;
+	value: string | number;
 	text: string;
 }
 
-const StyledToggleButton = styled(ToggleButton)(() => ({
-	backgroundColor: "rgb(248,248,255)",
+interface IToggleProps {
+	state: string | number;
+	handleChange: (e: React.MouseEvent<HTMLElement>, value: string) => void;
+	options: IOption[];
+	label: string;
+}
+
+const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
+	backgroundColor: theme.palette.primary.light,
 	"&.Mui-selected": {
-		backgroundColor: "rgb(66, 66, 66)",
-		color: "white",
-		border: "1px solid white",
+		backgroundColor: theme.palette.primary.main,
+		color: theme.palette.primary.light,
+		border: "1px solid #fafafa",
 	},
 	"&:hover.Mui-selected": {
-		backgroundColor: "rgb(69, 69, 69)",
+		backgroundColor: theme.palette.primary.dark,
 		color: "white",
 	},
 	"&:hover": {
-		backgroundColor: "rgb(220, 220, 224)",
-		border: "1px solid white",
+		backgroundColor: "#eeeeee",
+		border: "1px solid #fafafa",
 	},
 	width: "100%",
 }));
@@ -36,7 +44,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
 	justifyContent: "center",
 }));
 
-const Toggle = ({ state, handleChange, options, label }: any) => {
+const Toggle = ({ state, handleChange, options, label }: IToggleProps) => {
 	return (
 		<>
 			<Box display="flex" flexDirection="column" width="100%">
