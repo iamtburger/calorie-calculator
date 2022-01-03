@@ -8,7 +8,7 @@ import {
 	Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	calculateNeat,
 	calculateCarlorieNeed,
@@ -34,6 +34,23 @@ const StyledSubmitButton = styled(Button)(({ theme }) => ({
 	marginBottom: "10px",
 }));
 
+const genderOptions = [
+	{ value: "female", text: "Female" },
+	{ value: "male", text: "Male" },
+];
+
+const activityLevelOptions = [
+	{ value: ActivityLevel.low, text: "Light" },
+	{ value: ActivityLevel.medium, text: "Moderate" },
+	{ value: ActivityLevel.high, text: "High" },
+];
+
+const goalOptions = [
+	{ value: GoalMultiplier.bulk, text: "Bulk" },
+	{ value: GoalMultiplier.recomp, text: "Recomp" },
+	{ value: GoalMultiplier.cut, text: "Cut" },
+];
+
 const CalorieForm = () => {
 	const [gender, setGender] = useState("female");
 	const [units] = useState("metric");
@@ -47,26 +64,26 @@ const CalorieForm = () => {
 		ageError: false,
 	});
 
-	const handleGenderChange = (
-		e: React.MouseEvent<HTMLElement>,
-		newGender: string
-	) => {
-		newGender && setGender(newGender);
-	};
+	const handleGenderChange = useCallback(
+		(e: React.MouseEvent<HTMLElement>, newGender: string) => {
+			newGender && setGender(newGender);
+		},
+		[]
+	);
 
-	const handleActivityChange = (
-		e: React.MouseEvent<HTMLElement>,
-		newActvitiyLevel: string
-	) => {
-		newActvitiyLevel && setActivityLevel(Number(newActvitiyLevel));
-	};
+	const handleActivityChange = useCallback(
+		(e: React.MouseEvent<HTMLElement>, newActvitiyLevel: string) => {
+			newActvitiyLevel && setActivityLevel(Number(newActvitiyLevel));
+		},
+		[]
+	);
 
-	const handleGoalChange = (
-		e: React.MouseEvent<HTMLElement>,
-		newGoal: string
-	) => {
-		newGoal && setGoal(Number(newGoal));
-	};
+	const handleGoalChange = useCallback(
+		(e: React.MouseEvent<HTMLElement>, newGoal: string) => {
+			newGoal && setGoal(Number(newGoal));
+		},
+		[]
+	);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -81,28 +98,38 @@ const CalorieForm = () => {
 		setCalorieNeed(Math.round(calorieNeed));
 	};
 
-	const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (isNaN(Number(e.target.value))) {
-			setError((state) => ({ ...state, heightError: true }));
-		} else {
-			setError((state) => ({ ...state, heightError: false }));
-		}
-	};
+	const handleHeightChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			if (isNaN(Number(e.target.value))) {
+				setError((state) => ({ ...state, heightError: true }));
+			} else {
+				setError((state) => ({ ...state, heightError: false }));
+			}
+		},
+		[]
+	);
 
-	const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (isNaN(Number(e.target.value))) {
-			setError((state) => ({ ...state, weightError: true }));
-		} else {
-			setError((state) => ({ ...state, weightError: false }));
-		}
-	};
-	const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (isNaN(Number(e.target.value))) {
-			setError((state) => ({ ...state, ageError: true }));
-		} else {
-			setError((state) => ({ ...state, ageError: false }));
-		}
-	};
+	const handleWeightChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			if (isNaN(Number(e.target.value))) {
+				setError((state) => ({ ...state, weightError: true }));
+			} else {
+				setError((state) => ({ ...state, weightError: false }));
+			}
+		},
+		[]
+	);
+
+	const handleAgeChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			if (isNaN(Number(e.target.value))) {
+				setError((state) => ({ ...state, ageError: true }));
+			} else {
+				setError((state) => ({ ...state, ageError: false }));
+			}
+		},
+		[]
+	);
 
 	const formHasErrors = Object.values(error).some((value) => value);
 
@@ -147,10 +174,7 @@ const CalorieForm = () => {
 							state={gender}
 							handleChange={handleGenderChange}
 							label="Gender"
-							options={[
-								{ value: "female", text: "Female" },
-								{ value: "male", text: "Male" },
-							]}
+							options={genderOptions}
 						/>
 					</LineBlock>
 					<LineBlock>
@@ -186,11 +210,7 @@ const CalorieForm = () => {
 							state={activityLevel}
 							handleChange={handleActivityChange}
 							label="Training Intensity"
-							options={[
-								{ value: ActivityLevel.low, text: "Light" },
-								{ value: ActivityLevel.medium, text: "Moderate" },
-								{ value: ActivityLevel.high, text: "High" },
-							]}
+							options={activityLevelOptions}
 						/>
 					</LineBlock>
 					<LineBlock>
@@ -198,11 +218,7 @@ const CalorieForm = () => {
 							state={goal}
 							handleChange={handleGoalChange}
 							label="Goal"
-							options={[
-								{ value: GoalMultiplier.bulk, text: "Bulk" },
-								{ value: GoalMultiplier.recomp, text: "Recomp" },
-								{ value: GoalMultiplier.cut, text: "Cut" },
-							]}
+							options={goalOptions}
 						/>
 					</LineBlock>
 					<StyledSubmitButton

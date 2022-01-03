@@ -3,6 +3,8 @@
 This app was made to provide a simple way to calculate the necessary calorie intake depending on gender, age, weight, height, training intensity and the goal.
 Meanwhile I had the chance get bit more familiar with Material UI.
 
+[calorie.rekurzor.com](https://calorie.rekurzor.com)
+
 ## TODO
 
 1. Error and result display correction

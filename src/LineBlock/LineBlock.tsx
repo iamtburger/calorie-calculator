@@ -20,4 +20,4 @@ const LineBlock = ({ children }: ILineBlockProps) => {
 	return <PaperLineBlock elevation={6}>{children}</PaperLineBlock>;
 };
 
-export default LineBlock;
+export default React.memo(LineBlock);

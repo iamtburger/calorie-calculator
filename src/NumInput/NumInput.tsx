@@ -1,3 +1,4 @@
+import React from "react";
 import { InputAdornment, TextField } from "@mui/material";
 
 interface INumInputProps {
@@ -38,4 +39,4 @@ const NumInput = ({ error, handleChange, label, type }: INumInputProps) => {
 	);
 };
 
-export default NumInput;
+export default React.memo(NumInput);
